@@ -1,4 +1,4 @@
-# Flask Minimal
+# Flask Menu User
 
 Aplikasi Flask sederhana dengan fitur:
 - Login/logout
