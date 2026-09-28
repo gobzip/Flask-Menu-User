@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Home Page</h2>
+<p>Selamat datang di Flask Minimal.</p>
+
+{% if session.get('username') %}
+<div class="alert alert-success">
+  Anda login sebagai <strong>{{ session.get('username') }}</strong> dengan group <strong>{{ session.get('group') }}</strong>.
+</div>
+{% else %}
+<div class="alert alert-info">
+  Silakan login untuk mengakses fitur yang dibatasi.
+</div>
+{% endif %}
+{% endblock %}

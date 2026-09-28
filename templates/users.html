@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>User Management</h2>
+
+{% if error %}
+  <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+{% if success %}
+  <div class="alert alert-success">{{ success }}</div>
+{% endif %}
+
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h4 class="card-title">Tambah User</h4>
+    <form method="post" class="row g-3">
+      <div class="col-md-4">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" name="username" required>
+      </div>
+      <div class="col-md-4">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Group</label>
+        <div class="d-flex flex-wrap gap-2 mt-2">
+          {% for group in groups %}
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="group_{{ loop.index }}" name="group_names" value="{{ group.group_name }}">
+            <label class="form-check-label" for="group_{{ loop.index }}">{{ group.group_name }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Simpan User</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h4 class="card-title">Daftar User</h4>
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Group</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td>
+            {% if user.groups %}
+              {{ user.groups | join(', ') }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td>
+            <div class="d-flex gap-2 align-items-center">
+              {% if user.id != session.get('user_id') %}
+              <a href="{{ url_for('settings.edit_user', user_id=user.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+              <form method="post" action="{{ url_for('settings.delete_user', user_id=user.id) }}" onsubmit="return confirm('Hapus user ini?');">
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+              </form>
+              {% else %}
+              <span class="text-muted">Current user</span>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

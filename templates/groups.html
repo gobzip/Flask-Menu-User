@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Group Management</h2>
+
+{% if error %}
+  <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+{% if success %}
+  <div class="alert alert-success">{{ success }}</div>
+{% endif %}
+
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h4 class="card-title">Tambah Group</h4>
+    <form method="post" class="row g-3">
+      <div class="col-md-10">
+        <label for="group_name" class="form-label">Nama Group</label>
+        <input type="text" class="form-control" id="group_name" name="group_name" placeholder="Contoh: auditor" required>
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Simpan Group</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h4 class="card-title">Daftar Group</h4>
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Group</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for group in groups %}
+        <tr>
+          <td>{{ group.id }}</td>
+          <td>{{ group.group_name }}</td>
+          <td class="d-flex gap-2">
+            <a href="{{ url_for('settings.edit_group', group_id=group.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+            <form method="post" action="{{ url_for('settings.delete_group', group_id=group.id) }}" onsubmit="return confirm('Hapus group ini?');">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="3" class="text-center text-muted">Belum ada group.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
